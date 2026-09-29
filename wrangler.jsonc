@@ -9,8 +9,8 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "webapp-production",
-      "database_id": "local-dev-placeholder"
+      "database_name": "unstudy",
+      "database_id": "69366374-99fb-4f55-bc62-319ac1f0acc2"
     }
   ]
 }
