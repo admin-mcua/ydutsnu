@@ -1,23 +1,21 @@
 // Resend email helper — sends the "Find your account" verification code.
 //
-// The API key is read from the RESEND_API_KEY environment binding when set
-// (recommended for production:  npx wrangler pages secret put RESEND_API_KEY)
-// and falls back to the built-in key so the app works out of the box.
-//
-// NOTE: with the default `onboarding@resend.dev` sender, Resend only delivers
-// to the email address of the Resend account owner until you verify your own
-// domain at https://resend.com/domains. Once verified, change FROM below to
-// something like  'Unstudy <noreply@yourdomain.com>'.
+// The API key MUST be provided via the RESEND_API_KEY environment binding
+// (Set in Cloudflare: npx wrangler secret put RESEND_API_KEY or in .dev.vars)
 
-const FALLBACK_KEY = 're_dqg4Lx57_5hHJB8j6AnXv4sgBwgmEWmg9'
-const FROM = 'Unstudy <onboarding@resend.dev>'
+const FROM = 'Unstudy <noreply@unstudy.xyz>'
 
 export async function sendResetCodeEmail(
   env: any,
   to: string,
   code: string
 ): Promise<{ ok: boolean; error?: string }> {
-  const apiKey = (env && env.RESEND_API_KEY) || FALLBACK_KEY
+  const apiKey = env && env.RESEND_API_KEY
+
+  if (!apiKey) {
+    console.error('[Resend error] RESEND_API_KEY is not configured in environment bindings.')
+    return { ok: false, error: 'Email service is not configured (missing API Key).' }
+  }
 
   const html = `
   <div style="font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;max-width:480px;margin:0 auto;padding:32px 24px;background:#ffffff;border-radius:16px;border:1px solid #e2e8f0;">
